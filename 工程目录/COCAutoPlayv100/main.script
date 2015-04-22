@@ -1,0 +1,752 @@
+-----------------------------------------------------------------------
+--COCAutoPlayv100
+-----------------------------------------------------------------------
+-- 创建脚本界面入口
+
+function clickItem1Color()
+	touchClick(616,360);
+end
+function clickItem2Color()
+	touchClick(772,360);
+end
+function clickItem3Color()
+	touchClick(920,360);
+end
+
+function isMainMapColor()
+	if isColor(142,13,0xFFCD13) and isColor(116,703,0xFFDA19) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function isAndriodHomeColor()
+	if isColor(1080,29,0x3F9BBF) and isColor(831,32,0x000000) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function clickWhiteCatApp()
+	local flag,x,y = findColor(0x2F7F97);	 --610,347
+	local flag2,x2,y2 = findColor(0x54DEF4);	--611,347
+	if flag and flag2 then
+	  toast("在坐标("..x..","..y..") 找到白貓");
+	  sleep(500);
+	  touchClick(x,y);
+	  sleep(500);
+	end		
+end
+
+function clickMap()
+	touchClick(1134,663);
+end
+
+function move(clock,time)	
+	--1280/720  >  640/360
+	--157,345 = 12 clock
+	touchDown(640,360);
+	sleep(200);
+	
+	if clock == 12 then -- +200 +0 
+		touchMove(640-250,360);
+	end		
+	if clock == 1 then  -- +200 +100
+		touchMove(640-250,360-100);
+	end
+	if clock == 2 then  -- +100 +200
+		touchMove(640-100,360-250);
+	end
+	if clock == 3 then  -- +0 +200
+		touchMove(640,360-250);
+	end
+	if clock == 4 then  -- -100 +200
+		touchMove(640+100,360-250);
+	end		
+	if clock == 5 then -- -200 +100
+		touchMove(640+250,360-100);
+	end		
+	if clock == 6 then -- -200 +0
+		touchMove(640+250,360);
+	end	
+	if clock == 7 then -- -200 -100
+		touchMove(640+250,360+100);
+	end		
+	if clock == 8 then -- -100 -200
+		touchMove(640+100,360+250);
+	end
+	if clock == 9 then -- +0 -200
+		touchMove(640,360+250);
+	end
+	if clock == 10 then -- +100-200
+		touchMove(640-100,360+250);
+	end	
+	if clock == 11 then -- +200 -100
+		touchMove(640-250,360+100);
+	end	
+	
+	sleep(time);
+	touchUp();
+end
+
+function gameIsExist()
+	if isColor(61,305,0x58BCF7) and isColor(33,398,0x5FBEF6) then
+		return false;
+	else
+		return true;	
+	end	
+end
+function gotoGameAgain()
+	if isColor(61,305,0x58BCF7) and isColor(33,398,0x5FBEF6) then
+		-- click game again.
+		touchClick(285,109);
+		sleep(20000);		
+	end
+end
+
+function useSkill1()
+	sleep(500);
+	touchDown(679,315);
+	sleep(500);
+	touchMove(679-200,315+150);-- skill 1 position
+	toast("skll 1");
+	--touchMove(620,491);-- skill 2 position
+	touchUp();
+	sleep(500);	
+end
+
+function useSkill2()
+	sleep(500);
+	touchDown(633,321);
+	sleep(500);	
+	touchMove(679-200,315-150);-- skill 2 position
+	toast("skll 2");	
+	touchUp();
+	sleep(500);	
+end
+
+function loopFight()
+	
+	--if (type == "2-12-3") then 
+		--toast("click 12-3  (536,353)");
+		--sleep(4000);
+		--touchDown(536,353);
+		--sleep(400);
+		--touchUp();
+		--sleep(4000);		
+	--end
+
+	if (type == "2-12-2") then
+		toast("click 12-2");
+		sleep(4000);
+		clickItem2Color();
+		sleep(4000);
+	end
+	
+	if (type == "2-10-2") then
+		toast("click , 2-10-2");
+		sleep(4000);
+		
+		--485,684 to 691,677, this is only work solution in white project.
+		touchClick(640,35);
+		sleep(100);	
+		touchDown(640,35);
+		sleep(100);	
+		touchMove(620,35);
+		sleep(100);
+		touchMove(600,35);
+		sleep(100);
+		touchMove(580,35);
+		sleep(100);
+		touchMove(560,35);
+		sleep(100);
+		touchMove(540,35);
+		sleep(100);
+		touchMove(500,35);	
+		touchUp();	
+		sleep(2000);
+		
+		--click 10-2 on new postion.
+		touchClick(896,353);		
+
+		sleep(4000);
+	end	
+	
+	if (type == "3-4-2") then
+		toast("click 3-4-2");		
+		clickItem3Color();
+		sleep(4000);				
+	end
+
+	if(type == "3-5-3") then
+		toast("click 3-5-3");		
+		clickItem2Color();
+		sleep(4000);
+	end
+	
+	toast("use first friend");
+	sleep(4000);
+	touchDown(344,336);
+	sleep(500);
+	touchUp();	
+	sleep(4000);
+	
+	toast("Click challenge button");
+	sleep(4000);
+	touchClick(1003,139);	
+	sleep(4000);
+	
+	toast("Start fighting after 10 sec.");
+	sleep(10000);
+	
+	-- skill delay  ,  -15 mean deplay 30 seconds
+	if (type == "2-10-2") then			
+		toast(string.format("%s %s %s", " Use skill , delay ",txtDelaySec," seconds"));			
+	end
+	
+	-- 四捨五入   +  IslandNormalTwo10Hyphen2 平均執行一次兩秒  所以除以2
+	local i = -math.ceil((txtDelaySec/2));
+	
+	--add by sec
+	local j = 0;
+	
+	local isClickedOKButton = false;
+	
+	while true do
+		if (type == "2-10-2") then
+			IslandNormalTwo10Hyphen2(j);
+			sleep(1000);
+			j = j + 1;
+		end
+
+		if (type == "2-12-2") then
+			ContinueClickMode(i);
+			i = i + 1;
+		end
+					
+		if (type == "3-4-2") then
+			-- init map.
+			if j == 0 then
+								
+				sleep(6000);
+								
+				toast("start move");
+				--Focus
+				touchDown(576,360);
+				sleep(500);
+				touchUp();									
+				--[map 1]
+				move(2,1000);
+				move(7,1000);
+				sleep(10000);
+				move(2,2000);
+				move(1,2000);							
+				move(11,3000);
+				move(10,500);
+				touchClick(576,360);
+				sleep(500);				
+				move(7,2000);
+				move(9,700);
+				touchClick(576,360);
+				sleep(500);				
+				move(5,1500);						
+				touchClick(576,360);
+				sleep(500);							
+				move(3,500);	
+				touchClick(576,360);
+				sleep(500);				
+				move(8,1500);
+				move(12,2000);
+				move(9,700);								
+				touchClick(576,360);
+				sleep(500);				
+				move(9,2000);
+				move(11,2000);								
+				sleep(2000);
+				
+				if isMainMapColor() then
+					break;				
+				end
+
+				--[map 2]			
+				toast("map 2");
+				sleep(5000);
+				move(10,1000);
+				move(1,2000);
+				move(2,2000);
+				move(11,1000);
+				move(9,500);
+				touchClick(576,360);
+				sleep(500);	
+				move(7,3500);
+				move(10,4000);
+				touchClick(576,360);
+				sleep(500);
+				touchClick(576,360);
+				sleep(500);				
+				
+				move(1,2000);
+				move(3,2000);
+				
+				if isMainMapColor() then
+					break;				
+				end
+
+				--[map 2]
+				for i=1,10 do
+					touchClick(576,360);
+					sleep(500);
+				end	
+					
+				move(3,3000);
+				move(4,3000);
+								
+				for i=1,10 do
+					touchClick(576,360);
+					sleep(500);
+				end	
+				
+				move(3,3000);
+				move(4,3000);
+				
+				for i=1,10 do
+					touchClick(576,360);
+					sleep(500);
+				end											
+			end
+			
+			--[map 3]
+			
+			j = j + 1;
+									
+			ContinueClickModeWithOutSkill();
+			if( j % 10 == 0) then 							
+				move(5,1000);
+				toast(j);
+				if isMainMapColor() then
+					break;				
+				end				
+			end
+			
+			-- 打太久 離開地圖
+			if( j == 60) then
+				sleep(3000);
+				input(4);
+				sleep(10000);
+				touchClick(716,235); -- 退出button
+				sleep(1000);
+				touchClick(712,275); -- 確認退出button				
+				sleep(5000);
+				touchClick(730,369); -- 以星盤強化 button
+				touchClick(730,369); -- 以星盤強化 button
+				sleep(5000);
+				--回到主地圖瞜
+				j = 0;
+				break;
+			end			
+		end
+						
+		if(type == "3-5-3") then
+			ContinueClickMode(i);
+			i = i + 1;				
+		end
+
+		if (isColor(296,646,0xFEEAB6) and isColor(260,646,0xFEE9B6)) or (isColor(296,646,0x7F755B) and isColor(260,646,0x7F745B))  then
+			toast("Fight end - Result : WIN");
+					
+			local isExit = false;
+						
+			sleep(1000);
+			touchClick(499,358);
+			sleep(1000);
+			touchClick(489,362);			
+			
+			--toast("升級過關 2新建築物 OK button  417,359");
+			sleep(1000);
+			touchClick(450,360);
+
+			--toast("升級過關 4新建築物 OK button  417,359");
+			sleep(1000);
+			touchClick(550,360);
+			
+			--toast("升級過關 5新建築物 OK button  280,359");
+			sleep(1000);
+			touchClick(600,360);
+			
+			--toast("升級過關 6新建築物 OK button  210,359");
+			sleep(1000);
+			touchClick(650,360);
+		
+			--toast("親密度升級  757,360");
+			sleep(1000);			
+			touchClick(757,360);				
+			sleep(1000);
+			touchClick(757,360);
+			sleep(1000);
+			touchClick(757,360);				
+			
+			sleep(4000);										  		
+
+			if isColor(1105,417,0xFF4260) then
+				toast("Click OK button");
+				sleep(5000);
+				touchClick(1105,417);
+				sleep(1000);
+				touchClick(1105,417);
+				sleep(5000);
+				j = 0;
+				break;											
+			end	
+			
+			if isColor(1105,417,0xFF4260) then
+				toast("Click OK button (secound)");
+				sleep(5000);		
+				touchClick(1105,417);
+				sleep(1000);
+				touchClick(1105,417);
+				sleep(5000);
+				j = 0;
+				break;												
+			end	
+		end	
+		
+		if (isColor(688,200,0xFFF4D6) and isColor(726,467,0xFEF3D5)) then			
+			toast("Fight end - Result : LOSS");
+			sleep(8000);
+			touchClick(470,279);			
+			sleep(2000);
+			touchClick(470,379);			
+			sleep(2000);	
+			touchClick(452,371);
+			sleep(10000);
+			j = 0;	
+			break;
+		end
+	end
+end
+
+function IslandNormalTwo12Hyphen3(j,clicked)
+	
+	if clicked then
+		
+		sleep(500);
+		-- ok button
+		touchClick(395,420);
+
+		--換隊友
+		sleep(500);
+		touchDown(1087,637);
+		sleep(500);
+		touchUp();
+		sleep(500);
+			
+		--down
+		touchDown(576,360);
+		sleep(200);
+		touchMove(169,500);
+		sleep(1800);
+		touchUp();	
+		
+		-- open  開下面的寶相
+		sleep(500);
+		touchClick(576,360);
+		sleep(1000);
+
+		--right coner up		
+		touchDown(576,360);
+		sleep(200);
+		touchMove(1000,500);
+		sleep(2000);
+		touchMove(1000,800);
+		sleep(2500);
+		touchUp();
+
+		-- open  開上面的寶相
+		sleep(500);
+		touchClick(576,360);
+		sleep(1000);
+
+		--left
+		touchDown(576,360);
+		sleep(200);
+		touchMove(420,30);
+		sleep(1300);
+		touchUp();		
+
+		useSkill1();
+				
+		for i=1,3 do
+			touchClick(576,360);
+			sleep(1000);
+			touchClick(576,360);
+			sleep(1000);
+			touchClick(576,360);
+			sleep(1000);
+			touchClick(576,360);
+			sleep(1000);			
+			useSkill1();
+		end
+			
+		toast("換隊友");
+		--換隊友
+		sleep(500);
+		touchDown(1087,637);
+		sleep(500);
+		touchUp();
+		sleep(500);		
+			
+	else
+		touchClick(576,360);
+		sleep(300);
+		touchClick(576,360);
+		sleep(300);
+		touchClick(576,360);
+		sleep(300);
+		touchClick(576,360);
+		sleep(300);
+		touchClick(576,360);
+		sleep(300);				
+		
+		if(j % 3 == 0) then	
+			toast(j);
+		end
+	
+		--Use SKILL by setting
+		if (j > 4 and j % 3 == 0) then			
+			useSkill1();
+		end	
+
+		--if j == 10 then
+			--換隊友
+			--touchClick(1012,680);
+		--end		
+	end
+end
+
+function IslandNormalTwo10Hyphen2(j)
+	--2-10-2 會有確認窗	
+	if isColor(821,369,0xFFB9D6) then
+		touchClick(821,369);		
+		sleep(2000);		
+		--開上面跟右邊的寶相
+		--Focus
+		touchDown(576,360);
+		sleep(500);
+		touchUp();
+		--up
+		move(11,2300);
+		-- open  開上面的寶相
+		sleep(500);
+		touchClick(576,360);
+		sleep(1000);
+		--down + right
+		move(4,3000);				
+		-- open 開右邊的寶相
+		sleep(500);
+		touchClick(576,360);
+		sleep(1000);		
+		--left
+		move(8,2000);
+	end		
+	for i=1,9 do			
+		touchClick(576,360);
+	end	
+end
+
+function ContinueClickMode(i)
+	-- up    1030,356
+	-- down 309,347
+	-- left  626,105
+	-- right 631,565
+	
+	--total use 2 sec.
+	for i=1,10 do
+		touchClick(626,105);
+		sleep(70);
+	end
+
+	--total use 1 sec.
+	--local j = 0;
+	--while true do
+		--touchClick(626,105);
+		--sleep(70);
+		--j = j + 1;
+		--if ( j == 10) then
+			--break;		
+		--end
+	--end
+
+	if( i == -20) then
+		toast("skill mode , delay 40 sec ");	
+	end	
+	
+	if( i == -15) then
+		toast("skill mode , delay 30 sec ");	
+	end	
+	
+	if( i == -10) then
+		toast("skill mode , delay 20 sec ");	
+	end	
+	
+	if( i == -5) then
+		toast("skill mode , delay 10 sec ");	
+	end	
+
+	--if( i == 0) then
+		--toast("skill mode(0)");	
+	--end	
+
+	--if( i == 5) then
+		--toast("skill mode(5)");	
+	--end	
+			
+	--Use SKILL by setting
+	if( i > 0 and (i % 3 == 0)) then	
+		useSkill1();
+	end	
+end
+
+function ContinueClickModeWithOutSkill()
+	-- up    1030,356
+	-- down 309,347
+	-- left  626,105
+	-- right 631,565
+	
+	--total use 2 sec.
+	for i=1,10 do
+		touchClick(626,105);
+		sleep(70);
+	end
+end
+
+function createUI()
+	showLoopSetting(false);
+	createRadioBox("type","2-10-2",false);    -- 用法師當leader test on 2015.04.04
+	createTextView("labSample1","   小符:紅黃綠紫  中符:紅綠  錢:352  魂:35");
+	newLine();
+	newLine();
+	createRadioBox("type","2-12-2",false);     --建議 "劍"
+	createTextView("labSample2","   小符:青紅黃綠紫  錢:1800  魂:183");
+	newLine();
+	newLine();
+	--createRadioBox("type","2-12-3",false); 
+	--createTextView("labSample3","   (開發中)\r\n 小符:青紅黃綠  中符:紅綠  錢:1000  魂:90");	
+	--newLine();
+	--newLine();
+	createRadioBox("type","3-4-2",true);
+	createTextView("labSample4","   小符:青紅黃綠  中符:青紅黃橙綠紫  大符:紅黃橙綠黃  錢:600  魂:60 ");	
+	newLine();
+	newLine();
+	createRadioBox("type","3-5-3",false);     --建議 "劍"
+	createTextView("labSample5","   小符:青紅黃紫   錢:1800 魂:192");	
+	newLine();
+	newLine();
+	createRadioBox("type","3-7-2",false);
+	createTextView("labSample4","   (開發中) ");	
+	newLine();
+	newLine();
+	newLine();
+	newLine();		
+	createTextView("labdelaySec","技能延遲設定： (適用 2-12-2 跟 3-5-3)");
+	newLine();
+	createTextView("labdelaySec2","技能1 開始使用延遲秒數:");	
+	createEditText("txtDelaySec",22,1,50,50);	
+	newLine();
+	newLine();
+	newLine();
+	newLine();
+	createTextView("info","[ 腳本使用說明跟注意事項 ]");		
+	newLine();
+	createTextView("info2","短網址 (注意區分大小寫)");
+	newLine();
+	createTextView("info2_1","http://ppt.cc/LhAR");
+	newLine();newLine();
+	createTextView("info3","永久連結");
+	newLine();
+	createTextView("info3_1","http://mgamehelper.blogspot.tw/p/project.html");
+	newLine();
+	newLine();
+	createTextView("version","版本：v1.1.0");
+	-- v102 , 修正 2-10-2 用法師系列 近距戰士系列會跑來開寶物
+	-- to be add 3-4-2
+	-- 
+	-- ref: http://shironekoproject.gamerch.com/%E3%83%AB%E3%83%BC%E3%83%B3%E5%85%A5%E6%89%8B%E5%A0%B4%E6%89%80#content_2_15
+	
+	--896,382 --12
+	--852,567 --1.5
+	--586,615 --3
+	--337,582 --4.5
+	--287,375 --6
+	--350,140 --7.5
+	--574,70 --9
+	--833,137 --10.5
+end
+
+-- 脚本执行入口
+function main()
+		
+
+	--todo , add main screen sheck.	
+	--if isAndriodHomeColor() then 
+		--clickWhiteCatApp()
+	--end
+
+		
+	sleep("11111111");
+
+	--兼容模式 check
+	if not(isCompatMode()) then
+		--toast("兼容模式設定錯誤");
+		toast("CompatMode Error");
+		sleep(1000000);	
+	end
+					
+	toast(type);
+	toast(string.format("%s %s", type, " "));			
+	sleep(3000);
+				
+	local playCounter = 0;
+	toast(string.format("%s %s", "@playCounter = ",playCounter));			
+	
+	while true do
+		sleep(3000);
+		
+		loopFight();
+		
+		toast("loopFight end , sleep 10 sec.");
+		
+		sleep(10000);
+							
+		if (type ==  "2-10-2") then
+			-- 10-2 & 10-3 偏高 , use 690,363
+			toast("2-10-2 ending > click 546,374");	
+			sleep(6000);
+			touchClick(546,374);
+		end
+
+		if (type == "2-12-2") then
+			-- test on 12-2 , 564,361
+			toast("2-12-2 ending > click  634,366");	
+			sleep(6000);
+			touchClick(634,366);
+		end	
+				
+		--if(type ==  "2-12-3")then
+			--toast("2-12-3 結束後點  636,366");	
+			--sleep(6000);
+			--touchClick(636,366);	
+		--end
+		
+		if (type == "3-4-2") or (type == "3-5-3") then
+			toast("3-5-3 ending > click  636,366");	
+			sleep(6000);
+			touchClick(636,366);
+		end		
+			
+		sleep(6000);	
+		playCounter = playCounter + 1;			
+		toast(string.format("%s %s", "playCounter = ",playCounter));			
+	end			
+end
