@@ -21,7 +21,10 @@ function createUI()
 	showLoopSetting(false);	
 	newLine();
 	createCheckBox("autoCollect","自動收集資源",true);
-	newLine();	
+	newLine();
+	createTextView("lab1","幾秒後自動重新連線");
+	newLine();
+	createTextView("labdelaySec"," 幾秒後開始切換:");createEditText("txtDelaySec",300,1,70,60);
 end
 
 function zoomToMax()
@@ -62,8 +65,8 @@ function main()
 		--sleep(1000);
 		
 		if isConnectionLostColor() then
-			toast("被從別的裝置登入 5分鐘後重登");		
-			sleep(300000);
+			toast(string.format("%s %s %s","被從別的裝置登入",txtDelaySec,"秒後重登"));
+			sleep(txtDelaySec*1000);
 			--sleep(10000);
 			touchClick(602,496);
 		end
