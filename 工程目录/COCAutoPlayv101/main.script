@@ -1,0 +1,107 @@
+-----------------------------------------------------------------------
+--COCAutoPlayv101
+-----------------------------------------------------------------------
+-- 创建脚本界面入口
+function isMapColor()
+	if isColor(1239,165,0xD8EC77) and isColor(1228,168,0xD0E86E) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function isConnectionLostColor()
+	if isColor(758,265,0x282828) and isColor(835,266,0x282828) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function createUI()
+	showLoopSetting(false);	
+	newLine();
+	createCheckBox("autoCollect","自動收集資源",true);
+	newLine();
+	createTextView("lab1","幾秒後自動重新連線");
+	newLine();
+	createTextView("labdelaySec"," 幾秒後開始切換:");createEditText("txtDelaySec",300,1,70,60);
+end
+
+function zoomToMax()
+	sleep(1000);
+	touchDown(912,164);	--手指0按下坐标(100,100)
+	touchDown(228,636,1);	--手指1按下坐标(200,200)
+	sleep(300);
+	touchMove(675,327);	--手指0滑动到坐标(300,300)
+	touchMove(473,422,1);	--手指1按下坐标(200,200)
+	sleep(300);
+	touchUp(0);		--手指0弹起
+	touchUp(1);		--手指1弹起	
+	sleep(1000);
+end
+
+-- 脚本执行入口
+function main()
+	--兼容模式 check
+	if not(isCompatMode()) then
+		--toast("兼容模式設定錯誤");
+		toast("CompatMode Error");
+		sleep(1000000);	
+	end
+						
+	toast(string.format("%s %s", "自動收集資源:",autoCollect));			
+	sleep(3000);
+	
+	zoomToMax();
+					
+	while true do		
+						
+		if isConnectionLostColor() then
+			toast(string.format("%s %s %s","被從別的裝置登入",txtDelaySec,"秒後重登"));
+			sleep(txtDelaySec*1000);
+			--sleep(10000);
+			touchClick(602,496);
+		else
+			zoomToMax();
+		end
+		
+		if isMapColor() then 
+			--toast("find resource color 2.");
+			--sleep(4000);
+			local flag,x,y =  findColorFuzzy(0xD520B9,95,130,63,1044,703);
+			if flag then
+				
+			  touchClick(x,y);
+			  sleep(3000);	
+			  touchClick(1192,714);
+			  --toast("在坐标("..x..","..y..")找到顏色 0xE05AD5");
+			  if (isColor(1020,60,0xF8FCFF) and isColor(1020,63,0xF8FCFF)) then
+				touchClick(1020,60);
+				
+			  end
+			  
+			else
+			  --toast("沒找到資源");
+			  --sleep(4000);			  
+			end
+		end
+		
+		if isMapColor() then
+			--toast("find money color. 1");
+			--sleep(4000);
+			local flag,x,y =  findColorFuzzy(0xE0BC30,98,130,63,1044,703);
+			
+			if flag then
+			  --toast("在坐标("..x..","..y..")找到顏色 0xF8F061");			  
+			  touchClick(x,y);
+			  touchClick(1192,714);
+			else
+			  --toast("沒找到$$");
+			  --sleep(4000);	
+			end	
+		end
+		
+		sleep(3000);
+	end			
+end

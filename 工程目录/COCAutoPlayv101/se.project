@@ -1,0 +1,5 @@
+<project>
+ <name>COCAutoPlayv101</name>
+ <desc>fix Droid4X upgrade problem</desc>
+ <script>main.script</script>
+</project>
