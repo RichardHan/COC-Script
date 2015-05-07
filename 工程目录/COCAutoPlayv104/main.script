@@ -1,0 +1,136 @@
+-----------------------------------------------------------------------
+--COCAutoPlayv104
+-----------------------------------------------------------------------
+function isMapColor()
+	if isColor(1155,59,0x000000) and isColor(1197,127,0x000000) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function isConnectionLostColor()
+	if isColor(758,265,0x282828) and isColor(835,266,0x282828) then
+		return true;
+	else
+		return false;	
+	end
+end
+
+function createUI()
+	showLoopSetting(false);	
+	newLine();
+	createCheckBox("autoCollect","自動收集資源",true);
+	newLine();
+	createTextView("lab1","幾秒後自動重新連線");
+	newLine();
+	createTextView("labdelaySec"," 幾秒後開始切換:");createEditText("txtDelaySec",600,1,70,60);
+end
+
+function zoomToMax()
+	sleep(1000);
+	touchDown(912,164);	--手指0按下坐标(100,100)
+	touchDown(228,636,1);	--手指1按下坐标(200,200)
+	sleep(300);
+	touchMove(675,327);	--手指0滑动到坐标(300,300)
+	touchMove(473,422,1);	--手指1按下坐标(200,200)
+	sleep(300);
+	touchUp(0);		--手指0弹起
+	touchUp(1);		--手指1弹起	
+	sleep(1000);
+end
+
+-- 脚本执行入口
+function main()
+	--兼容模式 check
+	if not(isCompatMode()) then
+		--toast("兼容模式設定錯誤");
+		toast("CompatMode Error");
+		sleep(1000000);	
+	end
+						
+	--toast(string.format("%s %s", "自動收集資源:",autoCollect));			
+	sleep(3000);
+	
+	zoomToMax();
+
+	local i = 220;
+	local j = 110;
+	
+	local iniI = 210;
+	local iniJ = 90;
+	
+	local maxI = 900;
+	local maxJ = 650;
+	
+	local addX = 60;
+	local addY = 60;
+	
+	zoomToMax();
+	
+	touchClick(1192,714); -- for Cancel
+
+	while true do		
+						
+		if isConnectionLostColor() then
+			toast(string.format("%s %s %s","被從別的裝置登入",txtDelaySec,"秒後重登"));
+			sleep(txtDelaySec*1000);
+			--sleep(10000);
+			touchClick(602,496);			
+		end
+			
+		zoomToMax();
+	
+		--toast(string.format("%s %s %s","2click:",i,j));		
+		--sleep(1000);
+											
+		touchClick(i,j);		
+		sleep(300);
+		touchClick(1192,714); -- for Cancel			
+				
+		if i > maxI then
+			i = iniI;
+			j = j + addY;
+		else
+			i = i + addX;
+		end
+		
+		if j > maxJ then
+			i = maxI;
+			j = iniJ;
+		end
+			
+		-- target i = 1050
+		--target j = 650
+
+		--if isMapColor() then 
+			-- RESOURCE
+			--local flag,x,y =  findColorFuzzy(0xC046C0,95,217,93,1057,653);
+			--if flag then				
+			  --touchClick(x,y);
+			  --sleep(3000);	
+			  --touchClick(1192,714);			  
+			  --if (isColor(1020,60,0xF8FCFF) and isColor(1020,63,0xF8FCFF)) then
+				--touchClick(1020,60);			
+			  --end			  
+			--else
+			  --toast("沒找到Resource");
+			  --sleep(4000);			   
+			--end
+		--end
+				
+		--if isMapColor() then
+			-- MONEY
+			--local flag,x,y =  findColorFuzzy(0xD2DAB7,95,104,217,93,1057,653);			
+			--if flag then		  
+			  --touchClick(x,y);
+			  --touchClick(1192,714);
+			--else
+			  --toast("沒找到$$");
+			  --sleep(4000);	
+			--end	
+		--end
+		
+		sleep(4000);
+	end			
+end
